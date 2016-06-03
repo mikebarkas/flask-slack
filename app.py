@@ -20,6 +20,16 @@ def channel_info(channel_id):
     return None
 
 
+def send_message(channel_id, message):
+    slack_client.api_call(
+        "chat.postMessage",
+        channel = channel_id,
+        text = message,
+        username = 'pythonbot',
+        icon_emoji = ':robot_face:'
+    )
+
+
 if __name__ == '__main__':
     channels = list_channels()
     if channels:
@@ -28,6 +38,10 @@ if __name__ == '__main__':
             print(c['name'] + " (" + c['id'] + ")")
             channel_latest = channel_info(c['id'])
             if channel_latest:
-                print(channel_latest['latest']['text'])
+                print('Latest text from ' + c['name'] + ": ")
+                print('\t' + channel_latest['latest']['text'])
+            if c['name'] == 'test':
+                send_message(c['id'], "This message sent from python code.")
+        print('- - - - - -')
     else:
         print("Unable to authenticate.")
